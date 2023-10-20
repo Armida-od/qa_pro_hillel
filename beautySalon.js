@@ -8,15 +8,16 @@
 
 
 var services = {
-    haircut: 60,
-    shaving: 80,
-    'washing head': 100,
+    haircut: "60",
+    shaving: "80",
+    'washing head': "100",
 };
 
 function price(obj){
     let sum = 0;
     for (let generalPrice in obj) {
-        sum += obj[generalPrice];
+        let stringToNumber = parseInt(obj[generalPrice]);
+        sum += stringToNumber;
     }
     return sum;
 }
@@ -39,7 +40,14 @@ function maxPrice(obj){
 }
 
 console.log("Общая стоимость услуг равна: " + price(services) + " грн.");
-services.painting = 150;
-console.log("Общая стоимость услуг после добавления новой услуги равна: " + price(services) + " грн.");
+services.painting = "150";
+console.log("Общая стоимость услуг после добавления новой услуги \"" + lastIndex(services)+ "\" равна: " + price(services) + " грн.");
 console.log("Самая дешевая услуга равна : "+ minPrice(services) + " грн.");
 console.log("Самая дорогая услуга равна : "+ maxPrice(services) + " грн.");
+
+
+//Знаю, эта функция не по домашке. Но очень хотела попробовать вывести, какая услуга повышает стоимость.
+//Не сразу дошло, как сделать, так что оставлю для себя здесь.
+function lastIndex (obj){
+    return Object.keys(obj)[Object.keys(obj).length-1]
+}
