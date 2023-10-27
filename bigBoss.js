@@ -31,7 +31,7 @@ const company = {
                             type: 'subSubCompany',
                             uses: 'Рішення для продажу квитків',
                             sells: 'Рішення для продажу квитків',
-                        }
+                        },
                     ]
                 }
             ]
@@ -47,24 +47,59 @@ const company = {
 
 
 function findValueByKey(companyName) {
-    for (let i in company.clients) {
-        if (company.clients[i].name === companyName) {
-            return Object.entries(company.clients[i]);
-        } else {
-            for (let j in company.clients[i].partners) {
-                if (company.clients[i].partners[j].name === companyName) {
-                    return Object.entries(company.clients[i].partners[j]);
-                } else {
-                    for (let m in company.clients[i].partners[j].partners) {
-                        if (company.clients[i].partners[j].partners[m].name === companyName) {
-                            return Object.entries(company.clients[i].partners[j].partners[m]);
-                        }
-                    }
-                }
+    if (company.name === companyName) {
+        return {
+            name: company.name,
+            type: company.type,
+            platform: company.platform,
+            sellsSolution: company.sellsSolution,
+        };
+    }
+
+    // Перебор компаний
+    for (const client of company.clients) {
+        // Проверка клиента
+        if (client.name === companyName) {
+            return {
+                name: client.name,
+                type: client.type,
+                uses: client.uses,
+                sells: client.sells,
+            };
+        }
+
+        // Вложенные партнеры
+        if (client.partners) {
+            const result = findValueByKeyRecursive(client.partners, companyName);
+            if (result) {
+                return result;
             }
         }
     }
+
+    return null;
 }
 
+function findValueByKeyRecursive(partners, companyName) {
+    for (const partner of partners) {
+        if (partner.name === companyName) {
+            return {
+                name: partner.name,
+                type: partner.type,
+                uses: partner.uses,
+                sells: partner.sells,
+            };
+        }
+
+        if (partner.partners) {
+            const result = findValueByKeyRecursive(partner.partners, companyName);
+            if (result) {
+                return result;
+            }
+        }
+    }
+
+    return null;
+}
 
 console.log(findValueByKey('Клієнт 1.2.3'));
